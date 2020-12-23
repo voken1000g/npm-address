@@ -1,3 +1,4 @@
+const BN = require('bn.js')
 const crypto = require('crypto')
 const base32 = require('@voken/base32')
 
@@ -15,6 +16,23 @@ const isAddress = function (address) {
 const fromPublicKey = function (publicKey) {
   const hash20 = _publicKeyToHash20(publicKey)
   const addr32 = _hash20ToAddr32(hash20)
+
+  return _addr32ToChecksumAddress(addr32)
+}
+
+const fromBN = function (uint160String) {
+  let bnArr = new BN(uint160String).toArray()
+
+  if (bnArr.length > 20) {
+    throw EvalError('uint160 overflow')
+  }
+
+  while (bnArr.length < 20) {
+    bnArr.unshift(0)
+  }
+
+  const buffer = Buffer.from(bnArr)
+  let addr32 = _hash20ToAddr32(buffer)
 
   return _addr32ToChecksumAddress(addr32)
 }
@@ -65,5 +83,6 @@ const _addressToAddr32 = function (address) {
 
 module.exports = {
   isAddress: isAddress,
-  fromPublicKey: fromPublicKey
+  fromPublicKey: fromPublicKey,
+  fromBN: fromBN
 }
