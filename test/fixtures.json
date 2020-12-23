@@ -1,0 +1,39 @@
+{
+  "fromPublicKey": [
+    {
+      "publicKey": "02038de5ca300de53a6bc109c7178d4cb4d0cb626ff824c03872c64291fd04d8fa",
+      "address": "vbnjAa398KKqj6YJ174EMCAWn1ku3tnF5"
+    },
+    {
+      "publicKey": "03895f6bba9c6cf7405a05069f067fff29102b9a67af4e17c0d224b2086920b572",
+      "address": "vq1PHS3p8MC49AY8wpQ8YTe7wUM7Cq0CP"
+    },
+    {
+      "publicKey": "020f1c48f076cac945ece5e0da78df33dff4470c9b6839e03069b70ba3e55818dd",
+      "address": "vCH83huRB4FbfmB5B7437njeW7dfq9j6u"
+    }
+  ],
+  "validAddress":[
+    "vMN296Q5B54j49n8Wdq4RYrsEhYm9aNDx",
+    "v74NJWe7hjs5H3n87K4A97tK8NkPXya6T",
+    "vJK2QHmmpaNU3BvP4D5K4cKm5Gf8E2Jjk"
+  ],
+  "invalidAddress": [
+    {
+      "description": "length does not match",
+      "address": "v6U27674GH4Qb3Cav29PYbYW16f0HeT090"
+    },
+    {
+      "description": "length does not match",
+      "address": "v6U27674GH4Qb3Cav29PYbYW16f0HeT0"
+    },
+    {
+      "description": "not start with `v`",
+      "address": "i6U27674GH4Qb3Cav29PYbYW16f0HeT09"
+    },
+    {
+      "description": "invalid checksum",
+      "address": "v6U27674GH4Qb3Cav29PYbYW16f0Het09"
+    }
+  ]
+}

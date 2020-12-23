@@ -1,0 +1,35 @@
+{
+  "name": "@voken/address",
+  "version": "1.0.1",
+  "description": "Covert a public key to Voken wallet address. Or verify an address.",
+  "keywords": [
+    "address",
+    "voken",
+    "voken1000g",
+    "crypto",
+    "cryptography"
+  ],
+  "homepage": "https://github.com/voken1000g/npm-address",
+  "author": "@voken1000g",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/voken1000g/npm-address"
+  },
+  "bugs": {
+    "url": "https://github.com/voken1000g/npm-address/issues"
+  },
+  "main": "src/index.js",
+  "devDependencies": {
+    "standard": "^16.0.3",
+    "tape": "^5.0.1"
+  },
+  "dependencies": {
+    "@voken/base32": "^1.0.5"
+  },
+  "scripts": {
+    "standard": "standard",
+    "test": "npm run standard && npm run unit",
+    "unit": "tape test/index.js"
+  }
+}
