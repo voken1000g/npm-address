@@ -37,6 +37,17 @@ const fromBN = function (uint160String) {
   return _addr32ToChecksumAddress(addr32)
 }
 
+const addressToBN = function (address) {
+  try {
+    const addr32 = _addressToAddr32(address)
+    const hash20 = base32.decode(addr32)
+
+    return new BN(hash20)
+  } catch {
+    return false
+  }
+}
+
 const _sha256 = function (value) {
   return crypto.createHash('sha256').update(value).digest()
 }
@@ -84,5 +95,6 @@ const _addressToAddr32 = function (address) {
 module.exports = {
   isAddress: isAddress,
   fromPublicKey: fromPublicKey,
-  fromBN: fromBN
+  fromBN: fromBN,
+  addressToBN: addressToBN
 }

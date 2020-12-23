@@ -1,6 +1,6 @@
 {
   "name": "@voken/address",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Covert a public key to Voken wallet address. Or verify an address.",
   "keywords": [
     "address",
