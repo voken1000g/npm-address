@@ -5,9 +5,8 @@ const base32 = require('@voken/base32')
 const isAddress = function (address) {
   try {
     const addr32 = _addressToAddr32(address)
-    const checksumAddress = _addr32ToChecksumAddress(addr32)
 
-    return (address === checksumAddress)
+    return base32.isChecksum(addr32)
   } catch {
     return false
   }
@@ -15,9 +14,9 @@ const isAddress = function (address) {
 
 const fromPublicKey = function (publicKey) {
   const hash20 = _publicKeyToHash20(publicKey)
-  const addr32 = _hash20ToAddr32(hash20)
+  const addr32 = base32.encode(hash20)
 
-  return _addr32ToChecksumAddress(addr32)
+  return _addr32ToAddress(addr32)
 }
 
 const fromBN = function (uint160String) {
@@ -31,10 +30,9 @@ const fromBN = function (uint160String) {
     bnArr.unshift(0)
   }
 
-  const buffer = Buffer.from(bnArr)
-  let addr32 = _hash20ToAddr32(buffer)
+  let addr32 = base32.encode(Buffer.from(bnArr))
 
-  return _addr32ToChecksumAddress(addr32)
+  return _addr32ToAddress(addr32)
 }
 
 const addressToBN = function (address) {
@@ -60,24 +58,8 @@ const _publicKeyToHash20 = function (publicKey) {
   throw EvalError('public key length should be 33, which is compressed')
 }
 
-const _hash20ToAddr32 = function (hash20) {
-  return base32.encode(hash20)
-}
-
-const _addr32ToChecksumAddress = function (addr32) {
-  const hash32 = _sha256(addr32)
-  const addr32Array = addr32.split('')
-
-  let address = 'v'
-  addr32Array.forEach(function (c, i) {
-    if (hash32[i] > 127) {
-      address = address + c.toUpperCase()
-    } else {
-      address = address + c
-    }
-  })
-
-  return address
+const _addr32ToAddress = function (addr32) {
+  return 'v' + addr32
 }
 
 const _addressToAddr32 = function (address) {
@@ -89,7 +71,7 @@ const _addressToAddr32 = function (address) {
     throw new EvalError('address should start with `v`')
   }
 
-  return address.slice(1).toLowerCase()
+  return address.slice(1)
 }
 
 module.exports = {
