@@ -1,10 +1,11 @@
 const BN = require('bn.js')
-const crypto = require('crypto')
 const base32 = require('@voken/base32')
+const publicKey = require('@voken/public-key')
+const sha = require('@voken/sha')
 
-const isAddress = function (address) {
+const isAddress = function (input) {
   try {
-    const addr32 = _addressToAddr32(address)
+    const addr32 = _addressToAddr32(input)
 
     return base32.isChecksum(addr32)
   } catch {
@@ -12,50 +13,36 @@ const isAddress = function (address) {
   }
 }
 
-const fromPublicKey = function (publicKey) {
-  const hash20 = _publicKeyToHash20(publicKey)
+const fromPublicKey = function (input) {
+  const bufPublicKey = publicKey.compress(input)
+
+  const hash20 = sha.sha256(bufPublicKey).slice(-20)
   const addr32 = base32.encode(hash20)
 
   return _addr32ToAddress(addr32)
 }
 
-const fromBN = function (uint160String) {
-  let bnArr = new BN(uint160String).toArray()
+const fromBNString = function (input) {
+  let bnArray = new BN(input).toArray()
 
-  if (bnArr.length > 20) {
+  if (bnArray.length > 20) {
     throw EvalError('uint160 overflow')
   }
 
-  while (bnArr.length < 20) {
-    bnArr.unshift(0)
+  while (bnArray.length < 20) {
+    bnArray.unshift(0)
   }
 
-  let addr32 = base32.encode(Buffer.from(bnArr))
+  const addr32 = base32.encode(Buffer.from(bnArray))
 
   return _addr32ToAddress(addr32)
 }
 
-const addressToBN = function (address) {
-  try {
-    const addr32 = _addressToAddr32(address)
-    const hash20 = base32.decode(addr32)
+const toBN = function (address) {
+  const addr32 = _addressToAddr32(address)
+  const hash20 = base32.decode(addr32)
 
-    return new BN(hash20)
-  } catch {
-    return false
-  }
-}
-
-const _sha256 = function (value) {
-  return crypto.createHash('sha256').update(value).digest()
-}
-
-const _publicKeyToHash20 = function (publicKey) {
-  if (publicKey.length === 33) {
-    return _sha256(publicKey).slice(-20)
-  }
-
-  throw EvalError('public key length should be 33, which is compressed')
+  return new BN(hash20)
 }
 
 const _addr32ToAddress = function (addr32) {
@@ -64,19 +51,29 @@ const _addr32ToAddress = function (addr32) {
 
 const _addressToAddr32 = function (address) {
   if (address.length !== 33) {
-    throw new EvalError('address length does not match')
+    throw new InvalidLengthError('The length of a VOKEN address must be `33`')
   }
 
   if (address.slice(0, 1) !== 'v') {
-    throw new EvalError('address should start with `v`')
+    throw new EvalError('A VOKEN address must start with `v`')
   }
 
   return address.slice(1)
 }
 
+class InvalidLengthError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "InvalidLengthError";
+    this.code = 'INVALID_LENGTH'
+  }
+}
+
 module.exports = {
   isAddress: isAddress,
   fromPublicKey: fromPublicKey,
-  fromBN: fromBN,
-  addressToBN: addressToBN
+  fromBNString: fromBNString,
+  toBN: toBN,
+
+  InvalidLengthError: InvalidLengthError,
 }
