@@ -1,6 +1,6 @@
 {
   "name": "@voken/address",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Covert a public key to Voken wallet address. Or verify an address.",
   "keywords": [
     "address",
@@ -28,8 +28,8 @@
   },
   "dependencies": {
     "@types/bn.js": "^4.11.6",
-    "@voken/base32": "^1.3.1",
-    "@voken/public-key": "^1.3.0",
+    "@voken/base32": "^1.3.3",
+    "@voken/public-key": "^1.3.1",
     "@voken/sha": "^1.1.0",
     "bn.js": "^5.1.3"
   },
